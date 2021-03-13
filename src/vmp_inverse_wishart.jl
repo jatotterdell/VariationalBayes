@@ -1,0 +1,45 @@
+"""
+    InverseGammaPriorFragment(α, β)
+
+Returns the natural parameters from an Inverse-Gamma prior:
+``\\eta = (-\\alpha-1 \\beta)``
+
+"""
+function InverseGammaPriorFragment(α, β)
+    return [-α - 1; β]
+end
+
+"""
+    InverseWishartPriorFragment(\x)
+
+Returns the natural parameters from an Inverse-Wishart prior:
+``//eta = [-(\\xi + d + 1)/2, vec(\\Lambda)/2]``
+
+"""
+function InverseWishartPriorFragment(ξ, Λ)
+    d = size(Λ)[2]
+    η = zeros(d^2 + 1)
+    η[1] = -0.5*(ξ + d + 1)
+    η[2:d^2+1] = -0.5*vec(Λ)
+    return η
+end
+
+function IteratedInverseGWishartFragment(G, ξ, η̃₁, η̃₂)
+    η₁₁ = η̃₁[1]
+    η₂₁ = η̃₂[1]
+    d = length(η̃₁) - 1
+    ω = isdiag(G) ? 1.0 : (d + 1.0) / 2.0
+    Ω₁ = (η₁₁ + ω) * inv(vec⁻¹(η̃₁[2:d+1]))
+    Ω₂ = (η₂₁ + ω) * inv(vec⁻¹(η̃₂[2:d+1]))
+    η₁ = [-0.5*(ξ + 2) ; -0.5 * vec(Ω₂)]
+    η₂ = [-0.5*(ξ + 2 - 2ω) ; -0.5*vec(Ω₁)]
+    return [η₁, η₂]
+end
+
+function InverseGWishartCommonParameters(η)
+    η₁ = η[1]
+    η₂ = η[2:length(η)]
+    ξ = -2 - 2η₁;
+    Λ = -2vec⁻¹(η₂);
+    return [ξ, Λ]
+end
