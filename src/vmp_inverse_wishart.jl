@@ -14,6 +14,7 @@ function InverseGammaPriorFragment(α, β)
     return [-α - 1; β]
 end
 
+
 """
     InverseWishartPriorFragment(ξ, Λ)
 
@@ -28,6 +29,7 @@ function InverseWishartPriorFragment(ξ, Λ)
     η[2:d^2+1] = -0.5*vec(Λ)
     return η
 end
+
 
 """
     IteratedInverseGWishartFragment(G, ξ, η̃₁, η̃₂)
@@ -47,6 +49,7 @@ function IteratedInverseGWishartFragment(G, ξ, η̃₁, η̃₂)
     η₂ = [-0.5*(ξ + 2 - 2ω) ; -0.5*vec(Ω₁)]
     return [η₁, η₂]
 end
+
 
 """
     InverseGWishartCommonParameters(η)

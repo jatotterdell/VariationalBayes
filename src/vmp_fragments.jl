@@ -27,6 +27,7 @@ function GaussianPriorFragment(μ, Σ)
     return η
 end
 
+
 """
     GaussianLikelihoodFragment(n, XtX, Xty, yty, η̃1, η̃2)
 
@@ -37,6 +38,7 @@ function GaussianLikelihoodFragment(n, XtX, Xty, yty, η̃1, η̃2)
     η2 = [-n/2; G_VMP(η̃1, XtX, Xty, yty)]
     return [η1, η2]
 end
+
 
 """
     GaussianCommonParameters(η)
@@ -62,6 +64,8 @@ function GaussianEntropy(θ::Array)
     d = length(θ[1])
     return 0.5*(d*(1 + log(2π)) + logdet(θ[2]))
 end
+
+
 """
     GaussianEntropy(θ::Array)
 

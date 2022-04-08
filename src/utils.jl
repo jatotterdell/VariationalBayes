@@ -4,17 +4,18 @@
 Inverse of `vec` function.
 Reshape a vector back into a square matrix.
 """
-function vec⁻¹(V::AbstractVector{T})
+function vec⁻¹(V::AbstractVector{T}) where T <: Real
     d = isqrt(length(V))
     return reshape(V, d, d)
 end
+
 
 """
     vech(A)
 
 Half vectorisation of a matrix.
 """
-function vech(A::AbstractMatrix{T}) where T
+function vech(A::AbstractMatrix{T}) where T <: Real
     m = LinearAlgebra.checksquare(A)
     v = Vector{T}(undef, (m*(m+1))>>1)
     k = 0
@@ -24,21 +25,21 @@ function vech(A::AbstractMatrix{T}) where T
     return v
 end
 
+
 """
     vech⁻¹(V)
 
 Inverse of half-vectorisation of a matrix.
 """
-function vech⁻¹(V::AbstractVector{T}) where T
+function vech⁻¹(V::AbstractVector{T}) where {T<:Real}
     l = length(V)
-    d = Integer(0.5*(sqrt(8*l + 1) - 1))
-    @assert l == (d*(d+1))>>1
+    d = Integer(0.5 * (sqrt(8 * l + 1) - 1))
+    @assert l == (d * (d + 1)) >> 1
     A = Matrix{T}(undef, d, d)
     k = 0
     for j = 1:d, i = j:d
-        @inbounds A[i,j] = V[k += 1]
-        @inbounds A[j,i] = A[i,j]
+        @inbounds A[i, j] = V[k+=1]
+        @inbounds A[j, i] = A[i, j]
     end
     return A
 end
-
